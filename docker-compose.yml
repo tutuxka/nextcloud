@@ -1,0 +1,32 @@
+---
+version: "2.1"
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - MYSQL_HOST=mysql
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+    volumes:
+      - /root/data/docker_data/nextcloud/config:/config
+      - /root/data/docker_data/nextcloud/data:/data
+    ports:
+      - 4433:443
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: nextcloud-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_ROOT_PASSWORD=nextcloud
+    volumes:
+      - /root/data/docker_data/nextcloud/db:/var/lib/mysql
